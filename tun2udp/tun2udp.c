@@ -279,8 +279,8 @@ int main( int argc, char **argv ) {
         memcpy(connId, &buffer[2], 2);
         memcpy(data, &buffer[34], size_data);
         
-        
-	z = write( tundev, buffer, bufread );
+        z = write( tundev, data, size_data );
+	//z = write( tundev, buffer, bufread );
 	if( z < 0 ) {
 	  warn( "Failed to write %d bytes to TUN/TAP device %s", bufread, devname );
 	} else if( verbosity >= 30 ) {
