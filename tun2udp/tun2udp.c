@@ -21,7 +21,17 @@
 
 #include "create_tun_device.h"
 
+typedef enum { false, true } bool; // boolean true/false
+
 static int verbosity = 10;
+
+
+// Connection Info, used to hold info on a particular UDP connection ( as
+// referred to by a connection ID
+struct conn_info {
+  bool endpoint;
+  struct sockaddr *remote;
+};
 
 static int tun2udp_open_udp_sock( struct sockaddr_storage *addr, size_t addrsize ) {
   int sock;
@@ -261,6 +271,8 @@ int main( int argc, char **argv ) {
 	}
       } else if( FD_ISSET( udpsock, &readfds ) ) {
 	// Read incoming UDP messages
+        // We make decisions on whether to route the messages or write them to the TUN interface
+        
         bufread = recvfrom( udpsock, buffer, sizeof(buffer), 0, NULL, 0 );
 	if( bufread < 0 ) {
 	  perror( "Failed to read from UDP socket" );
@@ -273,12 +285,40 @@ int main( int argc, char **argv ) {
         // Unpack protocol
         // 8 bits: version | 128 bits: connection ID | data
         int size_data = bufread-34;
-        data = realloc(data, size_data);
+        if ( (data = realloc(data, size_data)) == NULL ) {
+          free(data);
+          data = (char *) malloc(size_data); 
+        }
         
         memcpy(version, &buffer[0], 0);
         memcpy(connId, &buffer[2], 2);
         memcpy(data, &buffer[34], size_data);
         
+        // Now we can figure out what to do with the message. We have to figure
+        // out if it has a valid connection ID, and if it doesn't, what to do
+        // with the message.
+        // 1) Is this a valid connId? What does the connId point to? 
+        //   a) Origin Node
+        //   b) Intermediate Node
+        //   c) Exit Node
+        //   d) Entry Node
+        // 2) TODO, applicable for path building
+
+        // NOTE: For the initial multinode experiment, we have two origin nodes
+        // with an intermediate node. The origin nodes connect to the
+        // intermediate node, which forwards traffic between them.
+
+        /*
+          Pseudo-Code:
+          struct co
+
+          conn_map; // map of connection IDs to their type/socket
+          
+          if connId in connMap:
+            conn_info = conn_map[connId]
+            
+        */
+
         z = write( tundev, data, size_data );
 	//z = write( tundev, buffer, bufread );
 	if( z < 0 ) {
