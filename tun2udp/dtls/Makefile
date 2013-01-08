@@ -10,3 +10,9 @@ server: server.c
 
 clean:
 	rm -f server
+
+# 1. Get running on mac
+# ----> somehow the patches didn't work!?
+
+# 2. Get running on linux
+# ----> cannot even find openssl shit!?
