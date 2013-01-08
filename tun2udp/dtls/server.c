@@ -216,9 +216,9 @@ void configure_server_ssl (SSL_CTX *ctx) {
     
     // Load cert and key
     // generating certs: http://devsec.org/info/ssl-cert.html
-    if (!SSL_CTX_use_certificate_file(ctx, "certs/server-cert.pem", SSL_FILETYPE_PEM))
+    if (!SSL_CTX_use_certificate_file(ctx, "./certs/server-cert.pem", SSL_FILETYPE_PEM))
         Die("Unable to find certificate!");
-    if (!SSL_CTX_use_PrivateKey_file(ctx, "certs/server-key.pem", SSL_FILETYPE_PEM))
+    if (!SSL_CTX_use_PrivateKey_file(ctx, "./certs/server-key.pem", SSL_FILETYPE_PEM))
         Die("Unable to find private key!");
     if (!SSL_CTX_check_private_key(ctx))
         Die("Invalid private key!");
