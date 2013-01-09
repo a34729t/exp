@@ -821,6 +821,7 @@ void start_client(char *remote_address, char *local_address, int port, int lengt
 	while (!(SSL_get_shutdown(ssl) & SSL_RECEIVED_SHUTDOWN)) {
 
 		if (messagenumber > 0) { 
+
 			len = SSL_write(ssl, buf, length);
 
 			switch (SSL_get_error(ssl, len)) {
@@ -964,11 +965,12 @@ int main(int argc, char **argv)
 
 	if (argc > 1) goto cmd_err;
 
+        printf("argc=%i\n", argc);
 	if (argc == 1) {
-        printf("Starting in client mode\n");
+                printf("Starting in client mode\n");
 		start_client(*argv, local_addr, port, length, messagenumber);
 	} else {
-	    printf("Starting in server mode %s:%i\n", local_addr, port);
+	        printf("Starting in server mode %s:%i\n", local_addr, port);
 		start_server(port, local_addr);
     }
     
