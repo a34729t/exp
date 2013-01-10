@@ -1,3 +1,10 @@
+#ifndef SSL_H
+    #include <netinet/in.h>
+    #include <sys/socket.h>
+    #include <sys/types.h>
+
+#endif
+
 /* OpenSSL headers */
 #ifndef SSL_H
     #include <openssl/ssl.h>

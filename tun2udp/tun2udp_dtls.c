@@ -9,13 +9,13 @@
 
 #include <errno.h>
 #include <fcntl.h>
-//#include <net/if.h>
+#include <net/if.h>
 #include <netinet/in.h>
 #include <sys/ioctl.h>
 #include <sys/select.h>
 #include <sys/socket.h>
 #include <sys/types.h>
-// #include <linux/if_tun.h>
+#include <linux/if_tun.h>
 #include <string.h>
 #include <unistd.h>
 #include <getopt.h>
@@ -24,12 +24,12 @@
 #include <stdlib.h> // malloc
 
 
-// #include <openssl/ssl.h>
-// #include <openssl/bio.h>
-// #include <openssl/err.h>
-// #include <openssl/rand.h>
+#include <openssl/ssl.h>
+#include <openssl/bio.h>
+#include <openssl/err.h>
+#include <openssl/rand.h>
 
-// #include "create_tun_device.h"
+#include "create_tun_device.h"
 
 // Function prototypes and macros
 void Die (char *msg) { fprintf(stderr, "%s\n", msg); exit(1); }
@@ -93,23 +93,27 @@ int main (int argc, char *argv[]) {
     if( tundev < 0 ) err( 1, "Failed to create TUN/TAP device" );
     fprintf( stdout, "Created TUN/TAP device '%s'.\n", devname );
     
+    /*
+        tun2udp creates a udp socket and listens on it and sends from it, no 
+        problems, because it doesn't needto wait for any sort of connection
+        dtls server uses a server socket and a client socket and puts each 
+        client in a new thread (on server side)
     
-    // tun2udp creates a udp socket and listens on it and sends from it, no problems, because it doesn't need
-    // to wait for any sort of connection
-    // dtls server uses a server socket and a client socket and puts each client in a new thread (on server side)
-    
-    // to use DTLS, I need to connect from one side so the handshake is initiated
-    // and use DTLSv1_server_method and DTLSv1_client_method
-    
+        to use DTLS, I need to connect from one side so the handshake is 
+        initiated and use DTLSv1_server_method and DTLSv1_client_method
+    */
+
     // Always need to do this for OpenSSL
     OpenSSL_add_ssl_algorithms();
-	SSL_load_error_strings();
-	
-	// If system is not given a remote address to connect to, it operates in server mode
-	// If system is given a remote address, it connects as client
-	// I will not do this in a multithreaded manner, however, for now at least!
-	// Then, once that works, try to make the UDP connection a universal module (so tcp/tls can be plugged in) 
-    
+    SSL_load_error_strings();
+
+    /*
+       If system is not given a remote address to connect to, it operates in 
+       server mode If system is given a remote address, it connects as client
+       I will not do this in a multithreaded manner, however, for now at least!
+       Then, once that works, try to make the UDP connection a universal module
+       (so tcp/tls can be plugged in) 
+    */
     
     
     
