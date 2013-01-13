@@ -1,8 +1,8 @@
+/* Socket headers */
 #ifndef SSL_H
     #include <netinet/in.h>
     #include <sys/socket.h>
     #include <sys/types.h>
-
 #endif
 
 /* OpenSSL headers */
@@ -13,7 +13,7 @@
     #include <openssl/rand.h>
 #endif
 
-// SSL callbacks (duh)
+void configure_server_ssl (SSL_CTX *ctx, char* certpath, char* keypath);
 int dtls_verify_callback (int ok, X509_STORE_CTX *ctx);
-int generate_cookie_callback (SSL *ssl, unsigned char *cookie, unsigned int *cookie_len, int *cookie_initialized, char *cookie_secret, int *COOKIE_SECRET_LENGTH);
-int verify_cookie_callback (SSL *ssl, unsigned char *cookie, unsigned int cookie_len, int *cookie_initialized, char *cookie_secret, int *COOKIE_SECRET_LENGTH);
+int generate_cookie_callback (SSL *ssl, unsigned char *cookie, unsigned int *cookie_len);
+int verify_cookie_callback (SSL *ssl, unsigned char *cookie, unsigned int cookie_len);

@@ -31,9 +31,19 @@
 
 #include "create_tun_device.h"
 #include "ssl_helper.h"
+
 // Function prototypes and macros
 void Die (char *msg) { fprintf(stderr, "%s\n", msg); exit(1); }
-void configure_server_ssl (SSL_CTX *ctx, char* certpath, char* keypath);
+
+// Nasty horrible global vars
+#define BUFFER_SIZE          (1<<16)
+#define COOKIE_SECRET_LENGTH 16
+
+int verbose = 0;
+int veryverbose = 0;
+unsigned char cookie_secret[COOKIE_SECRET_LENGTH];
+int cookie_initialized=0;
+
 
 int main (int argc, char *argv[]) {
     // Vars
@@ -119,25 +129,4 @@ int main (int argc, char *argv[]) {
     
 }
 
-void configure_server_ssl (SSL_CTX *ctx, char* certpath, char* keypath) {
-    // Configure the SSL context when operating in server mode
-    
-    SSL_CTX_set_cipher_list(ctx, "ALL:NULL:eNULL:aNULL"); // accept all ciphers, not recommended
-    SSL_CTX_set_session_cache_mode(ctx, SSL_SESS_CACHE_OFF);
-    
-    // Load cert and key
-    // generating certs: http://devsec.org/info/ssl-cert.html
-    if (!SSL_CTX_use_certificate_file(ctx, certpath, SSL_FILETYPE_PEM))
-        Die("Unable to find certificate!");
-    if (!SSL_CTX_use_PrivateKey_file(ctx, keypath, SSL_FILETYPE_PEM))
-        Die("Unable to find private key!");
-    if (!SSL_CTX_check_private_key(ctx))
-        Die("Invalid private key!");
-    
-    // Client must authenticate
-    SSL_CTX_set_verify(ctx, SSL_VERIFY_PEER | SSL_VERIFY_CLIENT_ONCE, dtls_verify_callback);
-    
-    SSL_CTX_set_read_ahead(ctx, 1);
-    SSL_CTX_set_cookie_generate_cb(ctx, generate_cookie_callback);
-    SSL_CTX_set_cookie_verify_cb(ctx, verify_cookie_callback);
-}
+
