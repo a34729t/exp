@@ -30,7 +30,7 @@
 #include <openssl/rand.h>
 
 #include "create_tun_device.h"
-
+#include "ssl_helper.h"
 // Function prototypes and macros
 void Die (char *msg) { fprintf(stderr, "%s\n", msg); exit(1); }
 void configure_server_ssl (SSL_CTX *ctx, char* certpath, char* keypath);

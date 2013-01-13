@@ -13,8 +13,8 @@ tun2udp: tun2udp.c *.h
 tun2udp_multinode: tun2udp_multinode.c *.h
 	cc -o tun2udp_multinode tun2udp_multinode.c
 
-tun2udp_dtls: tun2udp_dtls.c ssl_helper.c *.h
-	$(CC) $(LDFLAGS) $(CPPFLAGS) -o tun2udp_dtls tun2udp_dtls.c ssl_helper.c $(SSL_LIBS) $(LIBS)
+tun2udp_dtls: tun2udp_dtls.c *.h
+	$(CC) $(LDFLAGS) $(CPPFLAGS) -o tun2udp_dtls tun2udp_dtls.c $(SSL_LIBS) $(LIBS)
 
 clean:
 	rm -f tun2udp tun2udp_multinode tun2udp_dtls
