@@ -1,11 +1,5 @@
 #include "ssl_helper.h"
 
-// SSL callbacks (duh)
-int dtls_verify_callback (int ok, X509_STORE_CTX *ctx);
-int generate_cookie_callback (SSL *ssl, unsigned char *cookie, unsigned int *cookie_len, int *cookie_initialized, char *cookie_secret, int *COOKIE_SECRET_LENGTH);
-int verify_cookie_callback (SSL *ssl, unsigned char *cookie, unsigned int cookie_len, int *cookie_initialized, char *cookie_secret, int *COOKIE_SECRET_LENGTH);
-
-
 int dtls_verify_callback (int ok, X509_STORE_CTX *ctx) {
     // This function asks if we trust the cerificate. Duh, yes we do.
     return 1;
