@@ -124,9 +124,8 @@ Sending a heartbeat on read timeout seems to work nicely from server side
 
 ### TODO...
 
-Try to abstract away some of callbacks and connection handling!
-See what to do about verify callback
-
+1. Figure out how to make security break
+2. Make cookie handling not global
 
 ### Creating a Connection Object
 
