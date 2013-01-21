@@ -129,7 +129,41 @@ On the server you'll see this output (hopefully):
 
     Waiting for connection...
 
-### dtls\_echo_thread.c (broken)
+### dtls\_echo_thread.c
+
+This is broken. The client won't run at all, so we use the previous version (dtls\_echo). The threading stuff isn't working right either- the main thread still is communicating with the client socket!
+
+Start the server:
+
+    ./dtls_echo_thread -p 5556
+    
+Start the client:
+
+    $ ./dtls_echo -c -a 127.0.0.1 -m foo
+    Starting in client mode
+    The certificate is trusted. - Handshake was completed
+    - Received 3 bytes: foo
+    - Received 3 bytes: foo
+    *** Error: Resource temporarily unavailable, try again.    <------ wtf?
+
+And the server does something strange:
+
+    Starting in server mode :5556
+    UDP server ready. Listening to port '5556'.
+
+    Waiting for connection...
+    Sending hello verify request to IPv4 127.0.0.1 port 50159
+    Waiting for connection...
+    Accepted connection from IPv4 127.0.0.1 port 50159
+    -> threaded mode
+    - Handshake was completed
+    Waiting for connection...
+    received[0001000000000001]: foo
+    received[0001000000000002]: foo
+    Sending hello verify request to IPv4 127.0.0.1 port 50159  <------ wtf?
+    Waiting for connection...
+
+The `send hello verify request` and `Waiting for connection...` happen in the main thread; the `received[xxx]` is in the client connection thread. WTF?????
 
 ## Building off the simple example
 
