@@ -54,7 +54,7 @@ DTLS has some other benefits:
 
 ### Patching OpenSSL with Robin Seggelman's patches
 
-Download OpenSSL, get the patch and build it:
+Download OpenSSL:
 
     wget ftp://ftp.openssl.org/source/openssl-1.0.1c.tar.gz
 
@@ -63,7 +63,7 @@ Get the patchfile and apply it:
     wget http://sctp.fh-muenster.de/dtls/dtls-bugs-1.0.1.patch
     patch -p0 < dtls-bugs-1.0.1.patch
     
-And configure and make...
+And configure (for OSX use `./Configure darwin64-x86_64-cc`) and make.
 
 ### DTLS Echo Client/Server Using Robin Seggelman's Example Code
 
@@ -114,6 +114,25 @@ For write timeouts, we have `SSL_ERROR_WANT_WRITE`.
 ### DTLS Echo Client/Server With Heartbeat
 
 Only information I have to go on is from [Robin Seggelmann's page](http://sctp.fh-muenster.de/DTLS.pdf) and a line in the echo server code (commented out). When uncommented, this line causes a `SSL_ERROR_WANT_READ` to happen immediately. I have emailed Herr Seggelmann for clarification.
+
+**NO RESPONSE YET**
+
+### DONE...
+
+Add specific message data for client, and then run two clients at once
+Sending a heartbeat on read timeout seems to work nicely from server side
+
+### TODO...
+
+Try to abstract away some of callbacks and connection handling!
+See what to do about verify callback
+
+
+### Creating a Connection Object
+
+### Reading Cert from Char*
+
+See [https://gist.github.com/574388](https://gist.github.com/574388).
 
 ### UDP Tunnel with DTLS
 

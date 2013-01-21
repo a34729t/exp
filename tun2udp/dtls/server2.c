@@ -764,10 +764,10 @@ void start_client(char *remote_address, char *local_address, int port, int lengt
 	ctx = SSL_CTX_new(DTLSv1_client_method());
 	SSL_CTX_set_cipher_list(ctx, "eNULL:!MD5");
 
-	if (!SSL_CTX_use_certificate_file(ctx, "certs/client-cert.pem", SSL_FILETYPE_PEM))
+	if (!SSL_CTX_use_certificate_file(ctx, "certs/server-cert.pem", SSL_FILETYPE_PEM))
 		printf("\nERROR: no certificate found!");
 
-	if (!SSL_CTX_use_PrivateKey_file(ctx, "certs/client-key.pem", SSL_FILETYPE_PEM))
+	if (!SSL_CTX_use_PrivateKey_file(ctx, "certs/server-key.pem", SSL_FILETYPE_PEM))
 		printf("\nERROR: no private key found!");
 
 	if (!SSL_CTX_check_private_key (ctx))
